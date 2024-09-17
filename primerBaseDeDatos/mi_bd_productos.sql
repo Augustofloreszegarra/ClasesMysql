@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `mi_bd` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `mi_bd`;
 -- MySQL dump 10.13  Distrib 8.0.38, for Win64 (x86_64)
 --
 -- Host: localhost    Database: mi_bd
@@ -29,7 +27,7 @@ CREATE TABLE `productos` (
   `nombre` varchar(50) DEFAULT NULL,
   `precio` decimal(10,2) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=25 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +36,7 @@ CREATE TABLE `productos` (
 
 LOCK TABLES `productos` WRITE;
 /*!40000 ALTER TABLE `productos` DISABLE KEYS */;
-INSERT INTO `productos` VALUES (1,'Laptop',1200.00),(2,'Teléfono móvil',450.00);
+INSERT INTO `productos` VALUES (1,'Laptop',1350.00),(2,'Teléfono móvil',480.00),(3,'Tablet',350.00),(4,'Impresora',280.00),(5,'Cámara Digital',420.00),(6,'Smart TV 55 Pulgadas',1200.00),(7,'Auriculares Bluetooth',80.00),(8,'Reproductor de Blu-ray',120.00),(9,'Lavadora de Ropa',550.00),(10,'Refrigeradora Doble Puerta',800.00),(11,'Horno de Microondas',120.00),(12,'Licuadora de Alta Potencia',70.00),(13,'Silla de Oficina Ergonómica',150.00),(14,'Escritorio de Madera',200.00),(15,'Mesa de Comedor',250.00),(16,'Sofá de Tres Plazas',350.00),(17,'Mochila para Portátil',30.00),(18,'Reloj de Pulsera Inteligente',100.00),(19,'Juego de Utensilios de Cocina',40.00),(20,'Set de Toallas de Baño',20.00),(21,'Cama King Size',500.00),(22,'Lámpara de Pie Moderna',70.00),(23,'Cafetera de Goteo',40.00),(24,'Robot Aspirador',180.00);
 /*!40000 ALTER TABLE `productos` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -51,4 +49,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-17 10:25:17
+-- Dump completed on 2024-09-17 13:50:32

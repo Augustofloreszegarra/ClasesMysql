@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `mi_bd` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `mi_bd`;
 -- MySQL dump 10.13  Distrib 8.0.38, for Win64 (x86_64)
 --
 -- Host: localhost    Database: mi_bd
@@ -29,7 +27,7 @@ CREATE TABLE `clientes` (
   `nombre` varchar(50) DEFAULT NULL,
   `direccion` varchar(100) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -38,7 +36,7 @@ CREATE TABLE `clientes` (
 
 LOCK TABLES `clientes` WRITE;
 /*!40000 ALTER TABLE `clientes` DISABLE KEYS */;
-INSERT INTO `clientes` VALUES (1,'Juan Pérez','Libertad 3215, Mar del Plata'),(2,'María García','Constitución 456, Luján');
+INSERT INTO `clientes` VALUES (1,'Juan Pérez','Alberti 1789, Mar del Plata'),(2,'María García','Avenida 789, Ciudad del Este'),(3,'Ana López','Beltrán 1452, Godoy Cruz'),(4,'Carlos Sánchez','Saavedra 206, Las Heras'),(5,'Alejandro López','Calle Rivadavia 123, Buenos Aires'),(6,'Sofía Rodríguez','Avenida San Martín 456, Rosario'),(7,'Joaquín Pérez','Calle Belgrano 789, Córdoba'),(8,'Valeria Gómez','Calle Mitre 101, Mendoza'),(9,'Diego Martínez','Avenida 9 de Julio 654, Buenos Aires');
 /*!40000 ALTER TABLE `clientes` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -51,4 +49,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-17 10:25:17
+-- Dump completed on 2024-09-17 13:50:31
