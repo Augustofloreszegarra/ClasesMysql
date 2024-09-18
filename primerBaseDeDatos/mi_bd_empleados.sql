@@ -34,7 +34,7 @@ CREATE TABLE `empleados` (
   PRIMARY KEY (`id`),
   KEY `fk_departamento` (`departamento_id`),
   CONSTRAINT `fk_departamento` FOREIGN KEY (`departamento_id`) REFERENCES `departamentos` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=54 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43,7 +43,7 @@ CREATE TABLE `empleados` (
 
 LOCK TABLES `empleados` WRITE;
 /*!40000 ALTER TABLE `empleados` DISABLE KEYS */;
-INSERT INTO `empleados` (`id`, `nombre`, `apellido`, `edad`, `salario`, `fecha_contratacion`, `departamento_id`) VALUES (41,'Gabriel','Suárez',26,2100.53,'2024-09-13 00:06:58',NULL),(42,'Ana','Rodríguez',28,3707.55,'2024-09-13 00:30:14',1),(43,'Carlos','López',32,3360.53,'2024-09-13 00:31:51',4),(45,'Martín','González',30,3255.26,'2024-09-13 00:31:51',2),(46,'Luis','Fernández',28,3145.80,'2024-09-17 01:16:24',1),(47,'Marta','Ramírez',32,3317.00,'2024-09-17 15:59:36',1),(48,'Lorena','Guzmán',26,2600.00,'2024-09-17 16:06:03',1),(49,'Laura','Sánchez',27,3300.00,'2024-09-17 18:21:00',1),(50,'Javier','Pérez',29,3100.00,'2024-09-17 18:21:00',1),(51,'Camila','Gómez',26,3000.00,'2024-09-17 18:21:00',1),(52,'Lucas','Fernández',28,3200.00,'2024-09-17 18:21:00',1),(53,'Valentina','Rodríguez',30,3500.00,'2024-09-17 18:21:00',1);
+INSERT INTO `empleados` (`id`, `nombre`, `apellido`, `edad`, `salario`, `fecha_contratacion`, `departamento_id`) VALUES (1,'Ana','Rodríguez',28,3707.55,'2024-09-18 01:03:56',1),(2,'Carlos','López',32,3360.53,'2024-09-18 01:03:56',3),(4,'Martín','González',30,3255.26,'2024-09-18 01:03:56',2),(5,'Luis','Fernández',28,3145.80,'2024-09-18 01:03:56',1),(6,'Marta','Ramírez',32,3317.00,'2024-09-18 01:03:56',1),(7,'Lorena','Guzmán',26,2600.00,'2024-09-18 01:03:56',1),(8,'Laura','Sánchez',27,3300.00,'2024-09-18 01:08:22',1),(9,'Javier','Pérez',29,3100.00,'2024-09-18 01:08:22',1),(10,'Camila','Gómez',26,3000.00,'2024-09-18 01:08:22',1),(11,'Lucas','Fernández',28,3200.00,'2024-09-18 01:08:22',1),(12,'Valentina','Rodríguez',30,3500.00,'2024-09-18 01:08:22',1);
 /*!40000 ALTER TABLE `empleados` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -56,4 +56,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-17 13:50:31
+-- Dump completed on 2024-09-17 20:59:51
