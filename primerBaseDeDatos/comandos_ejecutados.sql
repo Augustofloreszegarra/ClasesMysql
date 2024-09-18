@@ -1,3 +1,4 @@
+CREATE DATABASE mi_bd;
 USE mi_bd;
 
 INSERT INTO empleados (nombre, apellido, edad, salario) VALUES ('Carlos', 'Martínez', 25, 1800.75);
@@ -538,6 +539,243 @@ WHERE nombre LIKE '%o%' OR apellido LIKE '%o%'
 GROUP BY departamento_id, nombre, apellido;
 
 
+#✏️Ejercicios consultas multitabla  - Parte 1
+-- Une las tablas de empleados con departamentos y solo muestra las columnas nombre, apellido, edad, salario de empleados y la columna nombre de departamentos.
+SELECT empleados.nombre,
+       empleados.apellido,
+       empleados.edad,
+       empleados.salario,
+       departamentos.nombre AS 'nombre_departamento'
+FROM empleados
+JOIN departamentos
+ON empleados.departamento_id = departamentos.id;
+
+-- Une las tablas ventas con la tabla empleados donde se muestren todas las columnas de ventas exceptuando la columna empleado_id y en su lugar muestres el nombre y apellido de la tabla empleados.
+SELECT ventas.id,
+       ventas.producto_id,
+       ventas.cliente_id,
+       ventas.cantidad,
+       ventas.precio_unitario,
+       ventas.monto_total,
+       empleados.nombre,
+       empleados.apellido
+FROM ventas
+JOIN empleados
+ON ventas.empleado_id = empleados.id;
+
+-- Une las tablas ventas con la tabla productos donde se muestren todas las columnas de ventas exceptuando la columna producto_id y en su lugar muestres la columna nombre de la tabla productos.
+SELECT ventas.id,
+       productos.nombre AS nombre_producto,
+       ventas.cliente_id,
+       ventas.cantidad,
+       ventas.precio_unitario,
+       ventas.monto_total,
+       ventas.empleado_id
+FROM ventas
+JOIN productos
+ON ventas.producto_id = productos.id;
+
+-- Une las tablas ventas con la tabla clientes donde se muestren todas las columnas de ventas exceptuando la columna cliente_id y en su lugar muestres la columna nombre de la tabla clientes.
+SELECT ventas.id,
+       ventas.producto_id,
+       clientes.nombre AS nombre_cliente,
+       ventas.cantidad,
+       ventas.precio_unitario,
+       ventas.monto_total,
+       ventas.empleado_id
+FROM ventas
+JOIN clientes
+ON ventas.cliente_id = clientes.id;
+
+-- Une las tablas ventas con la tablas empleados y departamentos donde se muestren todas las columnas de ventas exceptuando la columna empleado_id y en su lugar muestres el nombre y apellido de la tabla empleados y además muestres la columna nombre de la tabla departamentos.
+SELECT ventas.id,
+       ventas.producto_id,
+       ventas.cliente_id,
+       ventas.cantidad,
+       ventas.precio_unitario,
+       ventas.monto_total,
+       empleados.nombre,
+       empleados.apellido,
+       departamentos.nombre AS nombre_departamento
+FROM ventas
+JOIN empleados
+ON ventas.empleado_id = empleados.id
+JOIN departamentos
+ON empleados.departamento_id = departamentos.id;
+
+-- Une las tablas ventas, empleados, productos y clientes donde se muestren las columnas de la tabla ventas reemplazando sus columnas de FOREIGN KEYs con las respectivas columnas de “nombre” de las otras tablas.
+SELECT ventas.id,
+       productos.nombre AS nombre_producto,
+       clientes.nombre AS nombre_cliente,
+       empleados.nombre AS nombre_empleado,
+       empleados.apellido AS apellido_empleado,
+       ventas.cantidad,
+       ventas.precio_unitario,
+       ventas.monto_total
+FROM ventas
+JOIN productos
+ON ventas.producto_id = productos.id
+JOIN clientes
+ON ventas.cliente_id = clientes.id
+JOIN empleados
+ON ventas.empleado_id = empleados.id;
+
+-- Calcular el salario máximo de los empleados en cada departamento y mostrar el nombre del departamento junto con el salario máximo.
+SELECT departamentos.nombre AS nombre_departamento,
+       MAX(empleados.salario) AS salario_maximo
+FROM empleados
+JOIN departamentos
+ON empleados.departamento_id = departamentos.id
+GROUP BY departamentos.nombre;
 
 
+-- arreglando ventas que su monto tatal es 0.00
+UPDATE ventas
+SET monto_total = cantidad * precio_unitario
+WHERE monto_total = 0.00;
+-- agregando regla para que se calcule solo 
+ALTER TABLE ventas
+MODIFY COLUMN monto_total DECIMAL(10, 2) GENERATED ALWAYS AS (cantidad * precio_unitario) STORED;
 
+
+#✏️Ejercicios consultas multitabla - Parte 2 
+-- Calcular el monto total de ventas por departamento y mostrar el nombre del departamento junto con el monto total de ventas.
+SELECT d.nombre AS nombre_departamento, SUM(v.monto_total) AS monto_total_ventas
+FROM ventas v
+JOIN empleados e ON v.empleado_id = e.id
+JOIN departamentos d ON e.departamento_id = d.id
+GROUP BY d.nombre;
+
+-- Encontrar el empleado más joven de cada departamento y mostrar el nombre del departamento junto con la edad del empleado más joven.
+SELECT d.nombre AS nombre_departamento, MIN(e.edad) AS edad_empleado_mas_joven
+FROM empleados e
+JOIN departamentos d ON e.departamento_id = d.id
+GROUP BY d.nombre;
+
+SELECT d.nombre AS nombre_departamento, e.nombre AS nombre_empleado, e.apellido AS apellido_empleado, e.edad AS edad_empleado_mas_joven
+FROM empleados e
+JOIN departamentos d ON e.departamento_id = d.id
+WHERE e.edad = (
+    SELECT MIN(e2.edad)
+    FROM empleados e2
+    WHERE e2.departamento_id = e.departamento_id
+)
+ORDER BY d.nombre;
+
+
+-- Calcular el volumen de productos vendidos por cada producto (por ejemplo, menos de 5 “bajo”, menos 8 “medio” y mayor o igual a 8 “alto”) y mostrar la categoría de volumen junto con la cantidad y el nombre del producto.
+SELECT p.nombre AS nombre_producto, 
+       SUM(v.cantidad) AS total_vendido,
+       CASE 
+           WHEN SUM(v.cantidad) < 5 THEN 'bajo'
+           WHEN SUM(v.cantidad) < 8 THEN 'medio'
+           ELSE 'alto'
+       END AS categoria_volumen
+FROM ventas v
+JOIN productos p ON v.producto_id = p.id
+GROUP BY p.nombre;
+
+-- Encontrar el cliente que ha realizado el mayor monto total de compras y mostrar su nombre y el monto total.
+SELECT c.nombre AS nombre_cliente, SUM(v.monto_total) AS monto_total_compras
+FROM ventas v
+JOIN clientes c ON v.cliente_id = c.id
+GROUP BY c.nombre
+ORDER BY monto_total_compras DESC
+LIMIT 1;
+
+-- Calcular el precio promedio de los productos vendidos por cada empleado y mostrar el nombre del empleado junto con el precio promedio de los productos que ha vendido.
+SELECT e.nombre, e.apellido, AVG(p.precio) AS precio_promedio_vendido
+FROM ventas v
+JOIN empleados e ON v.empleado_id = e.id
+JOIN productos p ON v.producto_id = p.id
+GROUP BY e.nombre, e.apellido;
+
+-- Encontrar el departamento con el salario mínimo más bajo entre los empleados y mostrar el nombre del departamento junto con el salario mínimo más bajo.
+SELECT d.nombre AS nombre_departamento, MIN(e.salario) AS salario_minimo
+FROM empleados e
+JOIN departamentos d ON e.departamento_id = d.id
+GROUP BY d.nombre
+ORDER BY salario_minimo ASC
+LIMIT 1;
+
+-- Encuentra el departamento con el salario promedio más alto entre los empleados mayores de 30 años y muestra el nombre del departamento junto con el salario promedio. Limita los resultados a mostrar solo los departamentos con el salario promedio mayor a 3320.
+SELECT d.nombre AS nombre_departamento, AVG(e.salario) AS salario_promedio
+FROM empleados e
+JOIN departamentos d ON e.departamento_id = d.id
+WHERE e.edad > 30
+GROUP BY d.nombre
+HAVING salario_promedio > 3320
+ORDER BY salario_promedio DESC;
+
+
+#✏️Ejercicios consultas multitabla - Parte 3
+-- Encontrar la cantidad de productos vendidos por cada empleado y mostrar el nombre del empleado junto con la cantidad de productos vendidos.
+SELECT e.nombre, e.apellido, SUM(v.cantidad) AS cantidad_productos_vendidos
+FROM empleados e
+JOIN ventas v ON e.id = v.empleado_id
+GROUP BY e.id, e.nombre, e.apellido;
+
+-- Calcular el monto total de ventas por cada cliente y mostrar el nombre del cliente junto con el monto total de sus compras.
+SELECT c.nombre, SUM(v.monto_total) AS monto_total_compras
+FROM clientes c
+JOIN ventas v ON c.id = v.cliente_id
+GROUP BY c.id, c.nombre;
+
+-- Encuentra el producto más caro vendido y muestra su nombre y precio
+SELECT p.nombre, p.precio
+FROM productos p
+JOIN ventas v ON p.id = v.producto_id
+ORDER BY p.precio DESC
+LIMIT 1;
+
+
+-- Calcular el salario promedio de los empleados en cada departamento y mostrar el nombre del departamento junto con el salario promedio.
+SELECT d.nombre AS nombre_departamento, AVG(e.salario) AS salario_promedio
+FROM empleados e
+JOIN departamentos d ON e.departamento_id = d.id
+GROUP BY d.id, d.nombre;
+
+-- Encontrar la cantidad total de ventas realizadas por cada empleado y mostrar el nombre y apellido del empleado junto con la cantidad total de ventas.
+SELECT e.nombre, e.apellido, COUNT(v.id) AS cantidad_total_ventas
+FROM empleados e
+JOIN ventas v ON e.id = v.empleado_id
+GROUP BY e.id, e.nombre, e.apellido;
+
+-- Encuentra la cantidad de ventas realizadas por cada empleado y muestra el nombre y apellido del empleado junto con la cantidad total de ventas. Limita los resultados a mostrar solo a los empleados que hayan realizado más de 5 ventas y ordenarlos de forma descendente con respecto a la cantidad de ventas.
+SELECT e.nombre, e.apellido, COUNT(v.id) AS cantidad_total_ventas
+FROM empleados e
+JOIN ventas v ON e.id = v.empleado_id
+GROUP BY e.id, e.nombre, e.apellido
+HAVING COUNT(v.id) > 5
+ORDER BY cantidad_total_ventas DESC;
+
+-- Calcula el monto total vendido por cada empleado y muestra el nombre del empleado junto con el monto total. Usa la cláusula HAVING para filtrar a aquellos empleados que hayan vendido más de 10 productos en total. Muestra el resultado en orden descendente según el monto total vendido.
+SELECT e.nombre, e.apellido, SUM(v.monto_total) AS monto_total_vendido
+FROM empleados e
+JOIN ventas v ON e.id = v.empleado_id
+GROUP BY e.id, e.nombre, e.apellido
+HAVING SUM(v.cantidad) > 10
+ORDER BY monto_total_vendido DESC;
+
+-- Encuentra el monto total vendido a cada cliente y muestra el nombre del cliente junto con el monto total. Usa la cláusula HAVING para filtrar a aquellos clientes cuyo monto total promedio en sus compras sea superior a $1500. Muestra el resultado en orden descendente según el monto total vendido.
+SELECT c.nombre, SUM(v.monto_total) AS monto_total_vendido
+FROM clientes c
+JOIN ventas v ON c.id = v.cliente_id
+GROUP BY c.id, c.nombre
+HAVING AVG(v.monto_total) > 1500
+ORDER BY monto_total_vendido DESC;
+
+-- Calcula la cantidad total de ventas realizadas a cada cliente y muestra el nombre del cliente junto con la cantidad total de ventas. Limita los resultados a mostrar solo a los clientes que hayan realizado más de 3 ventas ordénalos de forma descendente según la cantidad de ventas.
+SELECT c.nombre, COUNT(v.id) AS cantidad_total_ventas
+FROM clientes c
+JOIN ventas v ON c.id = v.cliente_id
+GROUP BY c.id, c.nombre
+HAVING COUNT(v.id) > 3
+ORDER BY cantidad_total_ventas DESC;
+
+-- Encuentra los productos más caros vendidos (precio mayor a 1000), muestra su nombre y precio y ordenarlos de forma descendente por precio.
+SELECT p.nombre, p.precio
+FROM productos p
+JOIN ventas v ON p.id = v.producto_id
+WHERE p.precio > 1000
+ORDER BY p.precio DESC;
